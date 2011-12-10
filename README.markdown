@@ -4,6 +4,8 @@
 
 ##  Details
 [Example](http://alder101.github.com/ListCollectionView-Bug/)
+
+
 We bound `dataProvider` of three DataGrids to 3 bindable instances of `ArrayCollection`: myAC1, myAC2, myAC3. 
 
 Click the first button and all instances will be created with the same array elements. Each element is and an instance of `SimpleClass` with bindable properties.
