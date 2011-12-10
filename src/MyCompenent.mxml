@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+	 xmlns:s="library://ns.adobe.com/flex/spark"
+	 xmlns:mx="library://ns.adobe.com/flex/mx"
+	 width="400" height="300">
+
+
+  <fx:Declarations>
+    <!-- Place non-visual elements (e.g., services, value objects) here -->
+  </fx:Declarations>
+  <fx:Script>
+    <![CDATA[
+	    import mx.collections.ArrayCollection;
+	    [Bindable]
+	    public var myAC1:ArrayCollection;
+	    [Bindable]
+	    public var myAC2:ArrayCollection;
+	    [Bindable]
+	    public var myAC3:ArrayCollection;
+
+	    protected function button1_clickHandler(event:MouseEvent):void
+	    {
+		var v1:SimpleClass = new SimpleClass();
+		v1.name = "initial name 1";
+		v1.other_name = "initial other name 1";
+		var v2:SimpleClass = new SimpleClass();
+		v2.name = "initial name 2";
+		v2.other_name = "initial other name 2";
+		myAC1 = new ArrayCollection([v1, v2]);
+		myAC2 = new ArrayCollection([v1, v2]);
+		myAC3 = new ArrayCollection([v1, v2]);
+		myAC3.filterFunction = function():Boolean {return true;};
+		//myAC3.refresh();
+	    }
+
+	    protected function button2_clickHandler(event:MouseEvent):void
+	    {
+		myAC1[0].name = "new name";
+	    }
+	    protected function button3_clickHandler(event:MouseEvent):void
+	    {
+		myAC3.refresh();
+	    }
+
+    ]]>
+
+  </fx:Script>
+  <s:VGroup>
+    <s:HGroup>
+      <s:Button id="button1" label="Initialize" click="button1_clickHandler(event)"/>
+      <s:Button id="button2" label="Change myAC1[0].name property"
+		click="button2_clickHandler(event)"/>
+      <s:Button id="button3" label="Refresh myAC3" click="button3_clickHandler(event)" />
+    </s:HGroup>
+    <s:HGroup>
+
+      <s:DataGrid id="dg1" dataProvider="{myAC1}">
+	<s:columns>
+	  <s:ArrayList>
+	    <s:GridColumn dataField="name" headerText="name"></s:GridColumn>
+	    <s:GridColumn dataField="other_name" headerText="other name"></s:GridColumn>
+	  </s:ArrayList>
+	</s:columns>
+      </s:DataGrid>
+      <s:DataGrid id="dg2" dataProvider="{myAC2}">
+	<s:columns>
+	  <s:ArrayList>
+	    <s:GridColumn dataField="name" headerText="name"></s:GridColumn>
+	    <s:GridColumn dataField="other_name" headerText="other name"></s:GridColumn>
+	  </s:ArrayList>
+	</s:columns>
+      </s:DataGrid>
+      <s:DataGrid id="dg3" dataProvider="{myAC3}">
+	<s:columns>
+	  <s:ArrayList>
+	    <s:GridColumn dataField="name" headerText="name"></s:GridColumn>
+	    <s:GridColumn dataField="other_name" headerText="other name"></s:GridColumn>
+	  </s:ArrayList>
+	</s:columns>
+      </s:DataGrid>
+
+    </s:HGroup>
+  </s:VGroup>
+</s:Group>
