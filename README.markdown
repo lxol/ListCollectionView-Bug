@@ -18,7 +18,7 @@ Everything works as expected if we refresh myAC3 right after setting `filterFunc
 
 ## What's going on
 
-Array element change triggers `handlePropertyChange` function of `ListCollectionView`.
+An array element change triggers `handlePropertyChange` function of `ListCollectionView`.
 
 ````actionscript
 private function handlePropertyChangeEvents(events:Array):void
