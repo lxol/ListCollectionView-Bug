@@ -59,5 +59,5 @@ private function moveItemInView(item:Object,
     }
 }
 ````
-The problem is that `localIndex` is null by default and only updated after `refresh()`. So in case when we set `filterFunction` with no `refresh()` `COLLECTION_CHANGE` event will never be dispatched.
+The problem is that `localIndex` is null by default and takes non `null` value after `refresh()`. So in case when we set `filterFunction` with no `refresh()` `COLLECTION_CHANGE` event will never be dispatched.
 
