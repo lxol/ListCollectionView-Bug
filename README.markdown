@@ -1,29 +1,63 @@
 ##Description
 
-`ListCollectionView` should dispatch a `COLLECTION_CHANGE` event when an array element changes.  This is not the case in situation when we set `filterFunction` property and don't follow it with `refresh()` 
+`ListCollectionView` should dispatch a `COLLECTION_CHANGE` event when an array element changes.  This is not the case when we set `filterFunction` property and don't follow it with `refresh()` 
 
 ##  Details
 [Example](http://alder101.github.com/ListCollectionView-Bug/)
 
 
-We bound `dataProvider` of three DataGrids to 3 bindable instances of `ArrayCollection`: myAC1, myAC2, myAC3. 
+We bind 3 instances of ArrayCollections (myAC1, myAC2, myAC3) to `dataProvider` properties of DataGrids. 
 
-Click the first button and all instances will be created with the same array elements. Each element is and an instance of `SimpleClass` with bindable properties.
+Click the first button and all instances will be created with the same array elements. Each element is an instance of `SimpleClass` with bindable properties.
 
-The only difference between myAC2 and my AC3 is `filterFunction` property that is set for myAC3.
+The only difference between myAC2 and my AC3 is a non `nill` `filterFunction` property of AC3.
 
-We expect that all dataProvides should trigger the change of the property of the first element. (Click button 2). However third data is not updated. 
+We expect that all dataProviders get updated in responce to the change in the array element's property change. (Click button 2). However third DataGrid is not updated. 
 
-Everything works as expected if we refresh myAC3 right after setting `filterFunction` property. (click first button), then refresh myAC3 (cliick 3-rd button) a
-nd change a property of the first array element (click 2-nd button).
-
+Everything works as expected if we refresh myAC3 right after setting `filterFunction` property. (click buttons 1, 3, 2).
 
 ## What's going on
 
-Array element change triggers `handlePropertyChange` function of `ListCollectionView`. On line `1337` the function checks if `filterFunction` is  `null`. It runs `moveItemInView`. `COLLECTION_CHAGE` event should be dispatched from `moveItemInView`.
+Array element change triggers `handlePropertyChange` function of `ListCollectionView`.
 
-`moveItemInView` executes it's code only if `localIndex` property is not `null`(line `1574`). `localIndex` on the other hand will be set only by `refresh()`. 
+````actionscript
+private function handlePropertyChangeEvents(events:Array):void
+{
+    var eventItems:Array = events;
+    if (sort || filterFunction != null)
+    {
+      ....
+       moveItemInView(updateEntry.item, updateEntry.item, eventItems);
+      ....
+    }
+    if (eventItems.length > 0)
+    {
+       var updateEvent:CollectionEvent =
+              new CollectionEvent(CollectionEvent.COLLECTION_CHANGE);
+        ...
+       dispatchEvent(updateEvent);
+    }
+}
+````
 
-So in case when we set `filterFunction` with no `refresh()` `COLLECTION_CHANGE` event will never be dispatched.
+`COLLECTION_CHANGE` event is dispatched if `filterFunction` is not set or run `moveItemInview` otherwise. 
 
- 
+`moveItemInView` dispatch `COLLECTION_CHANGE` event only if `localIndex` is not `null`.
+
+```actionscript
+private function moveItemInView(item:Object,
+                               dispatch:Boolean = true, updateEventItems:Array = null):void
+{
+    if (localIndex)
+    {
+       ....
+       var event:CollectionEvent =
+                    new CollectionEvent(CollectionEvent.COLLECTION_CHANGE);
+       ....
+       dispatchEvent(event);
+     ....
+    }
+}
+````
+The problem is that `localIndex` is null by default and only updated after `refresh()`. So in case when we set `filterFunction` with no `refresh()` `COLLECTION_CHANGE` event will never be dispatched.
+
