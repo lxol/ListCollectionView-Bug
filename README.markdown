@@ -12,7 +12,7 @@ Click the first button and all instances will be created with the same array ele
 
 The only difference between myAC2 and my AC3 is a non `nill` `filterFunction` property of AC3.
 
-We expect that all dataProviders get updated in responce to the change in the array element's property change. (Click button 2). However third DataGrid is not updated. 
+We expect that all dataProviders get updated in responce to the change in the array element's property. (Click button 2). However third DataGrid is not updated. 
 
 Everything works as expected if we refresh myAC3 right after setting `filterFunction` property. (click buttons 1, 3, 2).
 
